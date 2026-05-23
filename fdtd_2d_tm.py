@@ -35,6 +35,7 @@ class FDTD2D_TMz:
         # --- Датчик ---
         self.probe_x, self.probe_y = Nx//2 + 20, Ny//2
         self.signal = []
+        self.time = []
 
     # -------------------------------------------------
     def Jz(self, n):
@@ -104,8 +105,27 @@ class FDTD2D_TMz:
         self.apply_mur_abc()
         self.source(n)
         self.signal.append(self.Ez[self.probe_x, self.probe_y])
+        self.time.append(n * self.dt)
 
     # -------------------------------------------------
+
+    def plot_signal(self):
+
+        plt.figure(figsize=(8, 5))
+
+        plt.plot(self.time, self.signal, linewidth=2)
+
+        plt.xlabel("Time")
+
+        plt.ylabel("Ez")
+
+        plt.title("Signal at probe (Mur ABC test)")
+
+        plt.grid()
+
+        plt.show()
+
+
     def animate(self):
         """Анімація поширення поля"""
 
@@ -132,5 +152,13 @@ class FDTD2D_TMz:
 # =====================================================
 
 if __name__ == "__main__":
-    sim = FDTD2D_TMz(Nx=120, Ny=120, Nt=200)
+
+    sim = FDTD2D_TMz(
+        Nx=120,
+        Ny=120,
+        Nt=400
+    )
+
     sim.animate()
+
+    sim.plot_signal()
